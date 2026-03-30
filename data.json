@@ -1,0 +1,312 @@
+{
+  "groups": [
+    {
+      "id": "group-a",
+      "label": "GROUP A",
+      "color": "#2a7d8e",
+      "order": 1,
+      "links": [
+        {
+          "id": "ga1",
+          "label": "Candlewood Suites TS",
+          "url": "http://10.16.10.123/admin/config.php?display=wakeup"
+        },
+        {
+          "id": "ga2",
+          "label": "Hampton Inn",
+          "url": "#"
+        },
+        {
+          "id": "ga3",
+          "label": "Hotel Arlo NoMad – New York",
+          "url": "#"
+        },
+        {
+          "id": "ga4",
+          "label": "Hotel Arlo Hudson Square – New York",
+          "url": "#"
+        },
+        {
+          "id": "ga5",
+          "label": "Viceroy Chicago",
+          "url": "#"
+        },
+        {
+          "id": "ga6",
+          "label": "Holiday Inn",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "id": "group-b",
+      "label": "GROUP B",
+      "color": "#2a7d8e",
+      "order": 2,
+      "links": [
+        {
+          "id": "gb1",
+          "label": "Blue Flamingo Resort Key West",
+          "url": "#"
+        },
+        {
+          "id": "gb2",
+          "label": "Hilton Garden Inn Key West",
+          "url": "#"
+        },
+        {
+          "id": "gb3",
+          "label": "Hotel Caza SF",
+          "url": "#"
+        },
+        {
+          "id": "gb4",
+          "label": "Fairfield Inn Key West",
+          "url": "#"
+        },
+        {
+          "id": "gb5",
+          "label": "Royal Sonesta Minneapolis Downtown",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "id": "group-c",
+      "label": "GROUP C",
+      "color": "#2a7d8e",
+      "order": 3,
+      "links": [
+        {
+          "id": "gc1",
+          "label": "Graduate Roosevelt Island",
+          "url": "#"
+        },
+        {
+          "id": "gc2",
+          "label": "Royalton Park Ave – NY",
+          "url": "#"
+        },
+        {
+          "id": "gc3",
+          "label": "WestHouse hotel New York",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "id": "group-d",
+      "label": "GROUP D",
+      "color": "#2a7d8e",
+      "order": 4,
+      "links": [
+        {
+          "id": "gd1",
+          "label": "Edison",
+          "url": "#"
+        },
+        {
+          "id": "gd2",
+          "label": "The Wall Street Hotel",
+          "url": "#"
+        },
+        {
+          "id": "gd3",
+          "label": "Belleclaire",
+          "url": "#"
+        },
+        {
+          "id": "gd4",
+          "label": "Gabriel South Beach Hotel",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "id": "group-e",
+      "label": "GROUP E",
+      "color": "#2a7d8e",
+      "order": 5,
+      "links": [
+        {
+          "id": "ge1",
+          "label": "Goodtimes Hotel",
+          "url": "#"
+        },
+        {
+          "id": "ge2",
+          "label": "Hollywood Volume",
+          "url": "#"
+        },
+        {
+          "id": "ge3",
+          "label": "The Gates Hotel South Beach",
+          "url": "#"
+        },
+        {
+          "id": "ge4",
+          "label": "Hollywood Grande",
+          "url": "#"
+        },
+        {
+          "id": "ge5",
+          "label": "Hyatt Regency TS",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "id": "group-f",
+      "label": "GROUP F",
+      "color": "#2a7d8e",
+      "order": 6,
+      "links": [
+        {
+          "id": "gf1",
+          "label": "Hotel Yotel – NY",
+          "url": "#"
+        },
+        {
+          "id": "gf2",
+          "label": "Yotel San Francisco",
+          "url": "#"
+        },
+        {
+          "id": "gf3",
+          "label": "Yotel – Washington DC",
+          "url": "#"
+        },
+        {
+          "id": "gf4",
+          "label": "Graduate Princeton",
+          "url": "#"
+        },
+        {
+          "id": "gf5",
+          "label": "Hotel Effie Sandestin",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "id": "group-g",
+      "label": "GROUP G",
+      "color": "#2a7d8e",
+      "order": 7,
+      "links": [
+        {
+          "id": "gg1",
+          "label": "Moxy East Village",
+          "url": "#"
+        },
+        {
+          "id": "gg2",
+          "label": "Moxy Chelsea",
+          "url": "#"
+        },
+        {
+          "id": "gg3",
+          "label": "Moxy Times Square",
+          "url": "#"
+        },
+        {
+          "id": "gg4",
+          "label": "Paramount Hotel",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "id": "group-h",
+      "label": "GROUP H",
+      "color": "#2a7d8e",
+      "order": 8,
+      "links": [
+        {
+          "id": "gh1",
+          "label": "Arlo Midtown",
+          "url": "#"
+        },
+        {
+          "id": "gh2",
+          "label": "Hotel Elser",
+          "url": "#"
+        },
+        {
+          "id": "gh3",
+          "label": "Arlo Chicago",
+          "url": "#"
+        },
+        {
+          "id": "gh4",
+          "label": "Arlo Williamsburg",
+          "url": "#"
+        },
+        {
+          "id": "gh5",
+          "label": "Wyndham hotel",
+          "url": "#"
+        },
+        {
+          "id": "gh6",
+          "label": "Arlo DC",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "id": "group-p",
+      "label": "GROUP P",
+      "color": "#2a7d8e",
+      "order": 9,
+      "links": []
+    },
+    {
+      "id": "group-parklane",
+      "label": "Park Lane",
+      "color": "#2a7d8e",
+      "order": 10,
+      "links": [
+        {
+          "id": "gpl1",
+          "label": "Hotel Park Lane",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "id": "group-bpp",
+      "label": "Boston Park Plaza",
+      "color": "#2a7d8e",
+      "order": 11,
+      "links": [
+        {
+          "id": "gbp1",
+          "label": "Boston Park Plaza",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "id": "group-5th",
+      "label": "The Fifth Avenue",
+      "color": "#2a7d8e",
+      "order": 12,
+      "links": [
+        {
+          "id": "g5a1",
+          "label": "The Fifth Avenue",
+          "url": "#"
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": "user-admin",
+      "username": "admin",
+      "passwordHash": "$2a$10$LmphLkDAdJtz9Fv4grleveiq0CjoZQIxALg4sIihlya6F8fhqWvz.",
+      "role": "admin"
+    }
+  ]
+}

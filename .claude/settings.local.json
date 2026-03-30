@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(npm install:*)",
+      "Bash(curl:*)",
+      "Bash(powershell -Command \"\nAdd-Type -AssemblyName System.Drawing\n\\\\$bmp = [System.Drawing.Bitmap]::new\\('C:\\\\\\\\Users\\\\\\\\me\\\\\\\\Downloads\\\\\\\\Projects\\\\\\\\WakeUpCall\\\\\\\\TGT.png'\\)\n\\\\$p = \\\\$bmp.GetPixel\\(10, 10\\)\nWrite-Host \\('TGT bg: R={0} G={1} B={2} = #{0:X2}{1:X2}{2:X2}' -f \\\\$p.R, \\\\$p.G, \\\\$p.B\\)\n\\\\$bmp.Dispose\\(\\)\n\\\\$bmp2 = [System.Drawing.Bitmap]::new\\('C:\\\\\\\\Users\\\\\\\\me\\\\\\\\Downloads\\\\\\\\Projects\\\\\\\\WakeUpCall\\\\\\\\WakeUp.png'\\)\n\\\\$p2 = \\\\$bmp2.GetPixel\\(10, 10\\)\nWrite-Host \\('WUC bg: R={0} G={1} B={2} = #{0:X2}{1:X2}{2:X2}' -f \\\\$p2.R, \\\\$p2.G, \\\\$p2.B\\)\n\\\\$bmp2.Dispose\\(\\)\n\")",
+      "Bash(docker compose:*)"
+    ]
+  }
+}

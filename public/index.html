@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wake Up Call</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <img src="/TGT.png" class="logo-tgt" alt="Tyme Global Technologies">
+    <img src="/WakeUpCall.png" class="logo-wuc" alt="Wake Up Call Service">
+  </header>
+
+  <main class="page-main">
+    <div class="groups-grid" id="groupsGrid">
+      <div class="loading-msg">Loading&hellip;</div>
+    </div>
+  </main>
+
+  <script>
+    function esc(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function safeHref(url) {
+      const u = String(url || '').trim();
+      return (u === '#' || u.startsWith('http://') || u.startsWith('https://')) ? esc(u) : '#';
+    }
+
+    fetch('/api/groups')
+      .then(r => r.json())
+      .then(groups => {
+        const grid = document.getElementById('groupsGrid');
+        grid.innerHTML = '';
+        groups.sort((a, b) => a.order - b.order).forEach(group => {
+          const col = document.createElement('div');
+          col.className = 'group-col';
+
+          const linksHtml = (group.links || []).map(l =>
+            `<li><a href="${safeHref(l.url)}"${l.url !== '#' ? ' target="_blank" rel="noopener noreferrer"' : ''}>${esc(l.label)}</a></li>`
+          ).join('');
+
+          col.innerHTML =
+            `<div class="group-header" style="--hue:${esc(group.color)}">${esc(group.label)}</div>` +
+            `<ul class="group-links">${linksHtml || '<li class="empty-placeholder">&nbsp;</li>'}</ul>`;
+
+          grid.appendChild(col);
+        });
+      })
+      .catch(() => {
+        document.getElementById('groupsGrid').innerHTML =
+          '<div class="loading-msg error">Failed to load. Is the server running?</div>';
+      });
+  </script>
+
+</body>
+</html>

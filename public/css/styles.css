@@ -1,0 +1,663 @@
+/* ============================================================
+   Design tokens
+   ============================================================ */
+:root {
+  --nav-bg:        #051E4D;   /* exact logo background color, sampled from PNGs */
+  --teal:          #26798a;
+  --teal-dark:     #1a5f6e;
+  --page-bg:       #e8eef7;
+  --card-bg:       #ffffff;
+  --text:          #1c2b40;
+  --text-muted:    #6b7a90;
+  --link:          #1a56a0;
+  --link-hover:    #0a3478;
+  --border:        #e0e6ef;
+  --radius-card:   10px;
+  --radius-sm:     5px;
+  --shadow-card:   0 1px 3px rgba(0,0,0,.07), 0 3px 10px rgba(0,0,0,.06);
+  --shadow-hover:  0 6px 24px rgba(0,0,0,.14);
+  --font:          'Calibri', 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+  --transition:    .18s ease;
+}
+
+/* ============================================================
+   Reset & Base
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  font-size: 13px;
+  background: var(--page-bg);
+  background-image: radial-gradient(circle at 20% 20%, #d6e4f5 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, #dde8f8 0%, transparent 50%);
+  background-attachment: fixed;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   Site Header
+   ============================================================ */
+.site-header {
+  background: var(--nav-bg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 130px;
+  box-shadow: 0 2px 14px rgba(0,0,0,.3);
+}
+
+.logo-tgt {
+  height: 120px;
+  width: auto;
+  display: block;
+}
+
+.logo-wuc {
+  height: 240px;
+  width: auto;
+  display: block;
+  border-radius: 10px;
+}
+
+/* ============================================================
+   Page Layout
+   ============================================================ */
+.page-main {
+  padding: 24px 28px 36px;
+}
+
+/* ============================================================
+   Groups Grid
+   ============================================================ */
+.groups-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+}
+
+/* ============================================================
+   Group Card
+   ============================================================ */
+.group-col {
+  background: var(--card-bg);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,.06), 0 6px 20px rgba(0,0,0,.07);
+  border: 1px solid rgba(255,255,255,.9);
+  transition: box-shadow .22s ease, transform .22s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.group-col:hover {
+  box-shadow: 0 10px 36px rgba(0,0,0,.15), 0 2px 8px rgba(0,0,0,.07);
+  transform: translateY(-4px);
+}
+
+.group-header {
+  background-color: var(--hue, var(--teal));
+  background-image: linear-gradient(145deg, rgba(255,255,255,.22) 0%, rgba(0,0,0,.18) 100%);
+  color: #fff;
+  font-weight: 800;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  padding: 14px 14px 12px;
+  text-shadow: 0 5px 5px rgba(0,0,0,.80);
+  /* thin bright line at very top for a "lit" effect */
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.25);
+}
+
+.group-links {
+  list-style: none;
+  padding: 8px 8px 10px;
+  flex: 1;
+}
+
+.group-links li {
+  margin: 2px 0;
+}
+
+.group-links a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 10px;
+  border-radius: 8px;
+  color: var(--link);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background var(--transition), color var(--transition);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Arrow that slides in on hover */
+.group-links a::after {
+  content: '›';
+  font-size: 18px;
+  line-height: 1;
+  opacity: 0;
+  flex-shrink: 0;
+  margin-left: 4px;
+  transform: translateX(-6px);
+  transition: opacity var(--transition), transform var(--transition);
+}
+
+.group-links a:hover {
+  background: rgba(26, 86, 160, 0.08);
+  color: var(--link-hover);
+}
+
+.group-links a:hover::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.empty-placeholder { height: 8px; }
+
+.loading-msg {
+  grid-column: 1 / -1;
+  padding: 32px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.loading-msg.error { color: #c0392b; }
+
+/* ============================================================
+   ADMIN PANEL — Login
+   ============================================================ */
+body.admin-page {
+  background: var(--page-bg);
+}
+
+.login-overlay {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 40px 36px 32px;
+  width: 360px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.10);
+}
+
+.login-logo {
+  display: block;
+  height: 48px;
+  width: auto;
+  margin: 0 auto 20px;
+}
+
+.login-card h1 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--text);
+  text-align: center;
+}
+
+.login-card .login-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+/* ============================================================
+   Forms (shared admin + login)
+   ============================================================ */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-family: var(--font);
+  color: var(--text);
+  background: #fff;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(38,121,138,.15);
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 16px;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-family: var(--font);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), opacity var(--transition), transform var(--transition);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn:active { transform: scale(.97); }
+
+.btn-primary {
+  background: var(--teal);
+  color: #fff;
+  border-color: var(--teal-dark);
+}
+.btn-primary:hover { background: var(--teal-dark); }
+
+.btn-danger {
+  background: #e63e3e;
+  color: #fff;
+  border-color: #c0392b;
+}
+.btn-danger:hover { background: #c0392b; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+.btn-ghost:hover { background: var(--page-bg); color: var(--text); }
+
+.btn-sm   { padding: 5px 11px; font-size: 11.5px; }
+.btn-full { width: 100%; justify-content: center; }
+
+.error-msg {
+  color: #c0392b;
+  font-size: 12px;
+  margin-top: 10px;
+  min-height: 18px;
+  text-align: center;
+}
+
+/* ============================================================
+   ADMIN PANEL — Layout
+   ============================================================ */
+#adminPanel {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.admin-nav {
+  background: var(--nav-bg);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 2px;
+  height: 52px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 10px rgba(0,0,0,.2);
+}
+
+.admin-nav .nav-brand {
+  color: rgba(255,255,255,.95);
+  font-weight: 700;
+  font-size: 14px;
+  margin-right: 20px;
+  white-space: nowrap;
+  letter-spacing: .3px;
+}
+
+.admin-nav .nav-spacer { flex: 1; }
+
+.nav-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,.6);
+  font-size: 13px;
+  font-family: var(--font);
+  font-weight: 500;
+  padding: 7px 14px;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  transition: background var(--transition), color var(--transition);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+.nav-btn:hover { background: rgba(255,255,255,.1); color: #fff; }
+.nav-btn.active { color: #fff; background: rgba(255,255,255,.15); }
+
+.nav-user {
+  color: rgba(255,255,255,.45);
+  font-size: 12px;
+  padding: 0 14px;
+}
+
+.admin-body {
+  flex: 1;
+  padding: 24px 28px;
+  max-width: 1140px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ============================================================
+   ADMIN PANEL — Section headers
+   ============================================================ */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  flex: 1;
+}
+
+/* ============================================================
+   ADMIN PANEL — Group cards
+   ============================================================ */
+.group-card {
+  background: var(--card-bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-card);
+  margin-bottom: 10px;
+  overflow: hidden;
+  transition: box-shadow var(--transition);
+}
+
+.group-card:hover { box-shadow: var(--shadow-card); }
+
+.group-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  background: #f7f9fc;
+  border-bottom: 1.5px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--transition);
+}
+
+.group-card-header:hover { background: #eef2f8; }
+
+.color-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(0,0,0,.15);
+  flex-shrink: 0;
+}
+
+.group-card-title {
+  font-weight: 700;
+  font-size: 13px;
+  flex: 1;
+  color: var(--text);
+}
+
+.group-order-badge {
+  font-size: 11px;
+  color: var(--text-muted);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 2px 9px;
+  background: #fff;
+}
+
+.group-card-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.chevron {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid var(--text-muted);
+  border-bottom: 2px solid var(--text-muted);
+  transform: rotate(45deg);
+  transition: transform var(--transition);
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+.group-card.collapsed .chevron { transform: rotate(-45deg); }
+
+.group-card-body {
+  padding: 14px 16px;
+}
+
+.group-card.collapsed .group-card-body { display: none; }
+
+/* ============================================================
+   ADMIN PANEL — Links table
+   ============================================================ */
+.links-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 12px;
+  font-size: 12.5px;
+}
+
+.links-table th {
+  text-align: left;
+  padding: 6px 10px;
+  border-bottom: 2px solid var(--border);
+  font-size: 10.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  font-weight: 600;
+}
+
+.links-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid #f3f5f8;
+  vertical-align: middle;
+}
+
+.links-table tr:last-child td { border-bottom: none; }
+.links-table tr:hover td { background: #f7f9fc; }
+
+.link-url {
+  color: var(--link);
+  text-decoration: none;
+  max-width: 300px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+  font-size: 12px;
+}
+.link-url:hover { text-decoration: underline; }
+
+.empty-msg {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 12px;
+  padding: 8px 2px;
+}
+
+/* ============================================================
+   ADMIN PANEL — Users table
+   ============================================================ */
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card-bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  font-size: 13px;
+  box-shadow: var(--shadow-card);
+}
+
+.users-table th {
+  background: #f7f9fc;
+  padding: 11px 16px;
+  text-align: left;
+  font-size: 10.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  font-weight: 600;
+  border-bottom: 2px solid var(--border);
+}
+
+.users-table td {
+  padding: 11px 16px;
+  border-bottom: 1px solid #f3f5f8;
+  vertical-align: middle;
+}
+
+.users-table tr:last-child td { border-bottom: none; }
+.users-table tr:hover td { background: #f7f9fc; }
+
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+}
+
+.role-badge.admin { background: #fff4e5; color: #996000; border: 1px solid #ffd680; }
+.role-badge.agent { background: #e6f2ff; color: #005b9e; border: 1px solid #99ccff; }
+
+/* ============================================================
+   Modal
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15,25,50,.5);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadein .15s ease;
+}
+
+@keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+
+.modal-box {
+  background: var(--card-bg);
+  border-radius: 14px;
+  width: 460px;
+  max-width: 95vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+  padding: 28px 28px 20px;
+  animation: slideup .18s ease;
+}
+
+@keyframes slideup {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.modal-box h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 22px;
+  color: var(--text);
+  padding-bottom: 12px;
+  border-bottom: 1.5px solid var(--border);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1.5px solid var(--border);
+}
+
+/* ============================================================
+   Toast
+   ============================================================ */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  padding: 11px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  z-index: 9999;
+  box-shadow: 0 4px 16px rgba(0,0,0,.2);
+  animation: toastIn .22s ease, fadeOut .4s ease 2.6s forwards;
+  pointer-events: none;
+}
+
+.toast-success { background: var(--teal); }
+.toast-error   { background: #e63e3e; }
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(10px) scale(.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes fadeOut { to { opacity: 0; } }
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 1100px) {
+  .groups-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (max-width: 760px) {
+  .groups-grid { grid-template-columns: repeat(2, 1fr); }
+  .page-main   { padding: 16px; }
+  .site-header { padding: 0 16px; height: 72px; }
+  .logo-tgt    { height: 54px; }
+  .logo-wuc    { height: 50px; }
+}
+
+@media (max-width: 440px) {
+  .groups-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+}

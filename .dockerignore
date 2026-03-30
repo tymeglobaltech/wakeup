@@ -1,0 +1,6 @@
+node_modules
+.claude
+*.png.tmp
+data.json.tmp
+wuc.png
+.env

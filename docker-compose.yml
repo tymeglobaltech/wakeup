@@ -1,0 +1,12 @@
+services:
+  wakeup-call:
+    build: .
+    container_name: wakeup-call
+    ports:
+      - "80:3000"
+    volumes:
+      - ./data.json:/app/data.json
+    restart: unless-stopped
+    environment:
+      - JWT_SECRET=${JWT_SECRET:-change-this-to-a-long-random-secret}
+      - PORT=3000
