@@ -644,6 +644,174 @@ body.admin-page {
 @keyframes fadeOut { to { opacity: 0; } }
 
 /* ============================================================
+   Theme Toggle Button
+   ============================================================ */
+.theme-toggle-btn {
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.22);
+  color: rgba(255,255,255,.85);
+  border-radius: 20px;
+  padding: 7px 16px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: var(--font);
+  font-weight: 500;
+  transition: background var(--transition), color var(--transition);
+  white-space: nowrap;
+  letter-spacing: .3px;
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(255,255,255,.22);
+  color: #fff;
+}
+
+/* In the main header, center the button between the two logos */
+.site-header .theme-toggle-btn {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.site-header { position: relative; }
+
+/* ============================================================
+   Dark Mode
+   ============================================================ */
+[data-theme="dark"] {
+  --page-bg:       #0e1219;
+  --card-bg:       #161d2e;
+  --text:          #dde4f2;
+  --text-muted:    #7b8baa;
+  --link:          #7ab8f5;
+  --link-hover:    #a8d0ff;
+  --border:        #252f48;
+  --shadow-card:   0 2px 6px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25);
+  --shadow-hover:  0 10px 36px rgba(0,0,0,.45), 0 2px 8px rgba(0,0,0,.25);
+}
+
+[data-theme="dark"] body {
+  background-image: radial-gradient(circle at 20% 20%, #1a2540 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, #111928 0%, transparent 50%);
+}
+
+[data-theme="dark"] .group-col {
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .group-links a:hover {
+  background: rgba(122, 184, 245, 0.1);
+}
+
+/* Admin - cards */
+[data-theme="dark"] .group-card {
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .group-card-header {
+  background: #111827;
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .group-card-header:hover {
+  background: #161f33;
+}
+
+[data-theme="dark"] .group-order-badge {
+  background: #1a2235;
+  border-color: var(--border);
+}
+
+/* Admin - links table */
+[data-theme="dark"] .links-table th {
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .links-table td {
+  border-color: #1c2438;
+}
+
+[data-theme="dark"] .links-table tr:hover td {
+  background: #161f33;
+}
+
+/* Admin - users table */
+[data-theme="dark"] .users-table {
+  background: var(--card-bg);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .users-table th {
+  background: #111827;
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .users-table td {
+  border-color: #1c2438;
+}
+
+[data-theme="dark"] .users-table tr:hover td {
+  background: #161f33;
+}
+
+/* Admin - section header */
+[data-theme="dark"] .section-header {
+  border-color: var(--border);
+}
+
+/* Admin - body background */
+[data-theme="dark"].admin-page,
+[data-theme="dark"] .admin-body {
+  background: var(--page-bg);
+}
+
+/* Login card */
+[data-theme="dark"] .login-card {
+  background: var(--card-bg);
+  border-color: var(--border);
+}
+
+/* Modal */
+[data-theme="dark"] .modal-box {
+  background: var(--card-bg);
+}
+
+[data-theme="dark"] .modal-box h3 {
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .modal-actions {
+  border-color: var(--border);
+}
+
+/* Forms */
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group select {
+  background: #111827;
+  color: var(--text);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .form-group input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Buttons */
+[data-theme="dark"] .btn-ghost {
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .btn-ghost:hover {
+  background: #1a2235;
+  color: var(--text);
+}
+
+/* Role badges in dark mode */
+[data-theme="dark"] .role-badge.admin { background: #2d1f00; border-color: #6b4400; color: #ffb84d; }
+[data-theme="dark"] .role-badge.agent { background: #001a33; border-color: #004d99; color: #66b3ff; }
+
+/* ============================================================
    Responsive
    ============================================================ */
 @media (max-width: 1100px) {

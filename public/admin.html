@@ -1,10 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wake Up Call &mdash; Admin</title>
   <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    // Apply saved theme before paint to avoid flash
+    (function() {
+      const t = localStorage.getItem('wuc_theme');
+      if (t) document.documentElement.setAttribute('data-theme', t);
+      else if (window.matchMedia('(prefers-color-scheme: dark)').matches)
+        document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
 </head>
 <body class="admin-page">
 
@@ -13,7 +22,7 @@
        ========================================================= -->
   <div id="loginPanel" class="login-overlay">
     <div class="login-card">
-      <img src="/WakeUp.png" class="login-logo" alt="Wake Up Call Service">
+      <img src="/WakeUpCall.png" class="login-logo" alt="Wake Up Call">
       <h1>Agent Login</h1>
       <p class="login-sub">Sign in to manage groups &amp; links</p>
       <form id="loginForm" novalidate>
@@ -44,6 +53,7 @@
       <span class="nav-spacer"></span>
       <span class="nav-user" id="navUsername"></span>
       <a href="/" target="_blank" class="nav-btn">View Site &#8599;</a>
+      <button class="nav-btn theme-toggle-btn" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme"></button>
       <button class="nav-btn" onclick="logout()">Logout</button>
     </nav>
 
@@ -68,6 +78,7 @@
           <thead>
             <tr>
               <th>Username</th>
+              <th>Email</th>
               <th>Role</th>
               <th>Actions</th>
             </tr>
@@ -94,5 +105,21 @@
   </div>
 
   <script src="/js/admin.js"></script>
+  <script>
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('wuc_theme', next);
+      updateThemeBtn();
+    }
+    function updateThemeBtn() {
+      const btn = document.getElementById('themeToggle');
+      if (!btn) return;
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      btn.textContent = isDark ? '☀ Light' : '☽ Dark';
+    }
+    updateThemeBtn();
+  </script>
 </body>
 </html>

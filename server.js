@@ -168,7 +168,15 @@ function buildSeedData() {
   };
 }
 
-if (!fs.existsSync(DATA_FILE)) {
+function isValidData(d) {
+  return d && Array.isArray(d.groups) && Array.isArray(d.users);
+}
+
+let _existing = null;
+if (fs.existsSync(DATA_FILE)) {
+  try { _existing = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8')); } catch { /* invalid JSON */ }
+}
+if (!isValidData(_existing)) {
   console.log('Initializing data.json with seed data...');
   writeData(buildSeedData());
 }
@@ -331,11 +339,11 @@ app.delete('/api/admin/groups/:groupId/links/:linkId', authMiddleware, (req, res
 
 app.get('/api/admin/users', authMiddleware, (req, res) => {
   const data = readData();
-  res.json(data.users.map(u => ({ id: u.id, username: u.username, role: u.role })));
+  res.json(data.users.map(u => ({ id: u.id, username: u.username, email: u.email || '', role: u.role })));
 });
 
 app.post('/api/admin/users', authMiddleware, (req, res) => {
-  const { username, password, role } = req.body || {};
+  const { username, password, role, email } = req.body || {};
   if (!username || !username.trim() || !password) {
     return res.status(400).json({ error: 'Username and password are required' });
   }
@@ -346,28 +354,30 @@ app.post('/api/admin/users', authMiddleware, (req, res) => {
   const user = {
     id: generateId(),
     username: username.trim(),
+    email: email ? email.trim().toLowerCase() : '',
     passwordHash: bcrypt.hashSync(password, 10),
     role: role === 'admin' ? 'admin' : 'agent'
   };
   data.users.push(user);
   writeData(data);
-  res.status(201).json({ id: user.id, username: user.username, role: user.role });
+  res.status(201).json({ id: user.id, username: user.username, email: user.email, role: user.role });
 });
 
 app.put('/api/admin/users/:id', authMiddleware, (req, res) => {
   const data = readData();
   const user = data.users.find(u => u.id === req.params.id);
   if (!user) return res.status(404).json({ error: 'User not found' });
-  const { username, password, role } = req.body || {};
+  const { username, password, role, email } = req.body || {};
   if (username && username.trim()) {
     const dup = data.users.find(u => u.username === username.trim() && u.id !== req.params.id);
     if (dup) return res.status(409).json({ error: 'Username already taken' });
     user.username = username.trim();
   }
+  if (email !== undefined) user.email = email.trim().toLowerCase();
   if (password) user.passwordHash = bcrypt.hashSync(password, 10);
   if (role) user.role = role === 'admin' ? 'admin' : 'agent';
   writeData(data);
-  res.json({ id: user.id, username: user.username, role: user.role });
+  res.json({ id: user.id, username: user.username, email: user.email || '', role: user.role });
 });
 
 app.delete('/api/admin/users/:id', authMiddleware, (req, res) => {

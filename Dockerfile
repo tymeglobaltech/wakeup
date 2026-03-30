@@ -9,7 +9,7 @@ RUN npm ci --omit=dev
 # Copy application files
 COPY server.js ./
 COPY public/ ./public/
-COPY TGT.png WakeUp.png ./
+COPY TGT.png WakeUp.png WakeUpCall.png ./
 
 EXPOSE 3000
 

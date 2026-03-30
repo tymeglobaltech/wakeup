@@ -290,6 +290,7 @@ function renderUsers(users) {
     const tr = document.createElement('tr');
     tr.innerHTML =
       `<td>${esc(user.username)}</td>
+       <td>${user.email ? `<a class="link-url" href="mailto:${esc(user.email)}">${esc(user.email)}</a>` : '<span style="color:var(--text-muted);font-style:italic">—</span>'}</td>
        <td><span class="role-badge ${esc(user.role)}">${esc(user.role)}</span></td>
        <td style="white-space:nowrap">
          <button class="btn btn-ghost btn-sm" onclick="openUserModal(${JSON.stringify(user).split('"').join('&quot;')})">Edit</button>
@@ -308,6 +309,10 @@ function openUserModal(user) {
        <input type="text" id="mUsername" value="${isEdit ? esc(user.username) : ''}" placeholder="Enter username">
      </div>
      <div class="form-group">
+       <label>Email Address <span style="font-weight:400;text-transform:none;font-size:11px">(used for Google SSO)</span></label>
+       <input type="email" id="mEmail" value="${isEdit ? esc(user.email || '') : ''}" placeholder="agent@example.com">
+     </div>
+     <div class="form-group">
        <label>${isEdit ? 'New Password (leave blank to keep current)' : 'Password'}</label>
        <input type="password" id="mPassword" autocomplete="new-password" placeholder="${isEdit ? 'Leave blank to keep current' : 'Enter password'}">
      </div>
@@ -321,12 +326,13 @@ function openUserModal(user) {
 
   _modalSaveFn = async () => {
     const username = document.getElementById('mUsername').value.trim();
+    const email    = document.getElementById('mEmail').value.trim();
     const password = document.getElementById('mPassword').value;
     const role     = document.getElementById('mRole').value;
     if (!username) { showToast('Username is required.', true); return; }
     if (!isEdit && !password) { showToast('Password is required.', true); return; }
 
-    const body = { username, role };
+    const body = { username, email, role };
     if (password) body.password = password;
 
     const url    = isEdit ? '/api/admin/users/' + user.id : '/api/admin/users';

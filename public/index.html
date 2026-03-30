@@ -1,15 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wake Up Call</title>
   <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    // Apply saved theme before paint to avoid flash
+    (function() {
+      const t = localStorage.getItem('wuc_theme');
+      if (t) document.documentElement.setAttribute('data-theme', t);
+      else if (window.matchMedia('(prefers-color-scheme: dark)').matches)
+        document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
 </head>
 <body>
 
   <header class="site-header">
     <img src="/TGT.png" class="logo-tgt" alt="Tyme Global Technologies">
+    <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme"></button>
     <img src="/WakeUpCall.png" class="logo-wuc" alt="Wake Up Call Service">
   </header>
 
@@ -32,6 +42,23 @@
       const u = String(url || '').trim();
       return (u === '#' || u.startsWith('http://') || u.startsWith('https://')) ? esc(u) : '#';
     }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('wuc_theme', next);
+      updateThemeBtn();
+    }
+
+    function updateThemeBtn() {
+      const btn = document.getElementById('themeToggle');
+      if (!btn) return;
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      btn.textContent = isDark ? '☀ Light' : '☽ Dark';
+    }
+
+    updateThemeBtn();
 
     fetch('/api/groups')
       .then(r => r.json())
