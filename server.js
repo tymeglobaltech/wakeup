@@ -5,6 +5,9 @@ const fs = require('fs');
 const path = require('path');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { OAuth2Client } = require('google-auth-library');
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -221,6 +224,14 @@ app.get('/api/groups', (req, res) => {
 });
 
 // ---------------------------------------------------------------------------
+// Public config (exposes non-secret settings to the frontend)
+// ---------------------------------------------------------------------------
+
+app.get('/api/config', (req, res) => {
+  res.json({ googleClientId: process.env.GOOGLE_CLIENT_ID || '' });
+});
+
+// ---------------------------------------------------------------------------
 // Auth
 // ---------------------------------------------------------------------------
 
@@ -240,6 +251,59 @@ app.post('/api/auth/login', (req, res) => {
     { expiresIn: '8h' }
   );
   res.json({ token, username: user.username, role: user.role });
+});
+
+// ---------------------------------------------------------------------------
+// Google SSO
+// ---------------------------------------------------------------------------
+
+app.post('/api/auth/google', async (req, res) => {
+  if (!process.env.GOOGLE_CLIENT_ID) {
+    return res.status(503).json({ error: 'Google SSO is not configured on this server' });
+  }
+  const { credential } = req.body || {};
+  if (!credential) return res.status(400).json({ error: 'No credential provided' });
+
+  try {
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID
+    });
+    const payload = ticket.getPayload();
+    const email = payload.email;
+
+    if (!payload.email_verified) {
+      return res.status(401).json({ error: 'Google account email is not verified' });
+    }
+    if (!email.toLowerCase().endsWith('@tymeglobal.com')) {
+      return res.status(403).json({ error: 'Only @tymeglobal.com accounts are permitted' });
+    }
+
+    const data = readData();
+    let user = data.users.find(u => u.email && u.email.toLowerCase() === email.toLowerCase());
+
+    if (!user) {
+      // First-time login — auto-create with agent role
+      user = {
+        id: generateId(),
+        username: email.split('@')[0],
+        email: email.toLowerCase(),
+        passwordHash: '',
+        role: 'agent'
+      };
+      data.users.push(user);
+      writeData(data);
+    }
+
+    const token = jwt.sign(
+      { id: user.id, username: user.username, role: user.role },
+      JWT_SECRET,
+      { expiresIn: '8h' }
+    );
+    res.json({ token, username: user.username, role: user.role });
+  } catch (err) {
+    res.status(401).json({ error: 'Invalid Google token' });
+  }
 });
 
 // ---------------------------------------------------------------------------

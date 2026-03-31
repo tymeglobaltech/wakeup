@@ -1,6 +1,48 @@
 'use strict';
 
 // ---------------------------------------------------------------------------
+// Google SSO
+// ---------------------------------------------------------------------------
+
+fetch('/api/config').then(r => r.json()).then(config => {
+  if (!config.googleClientId) return;
+  document.getElementById('ssoDivider').style.display = '';
+  const script = document.createElement('script');
+  script.src = 'https://accounts.google.com/gsi/client';
+  script.onload = () => {
+    google.accounts.id.initialize({
+      client_id: config.googleClientId,
+      callback: handleGoogleToken,
+      hosted_domain: 'tymeglobal.com'
+    });
+    google.accounts.id.renderButton(
+      document.getElementById('googleSignInBtn'),
+      { theme: 'outline', size: 'large', width: 288, text: 'signin_with' }
+    );
+  };
+  document.head.appendChild(script);
+}).catch(() => { /* SSO unavailable, silent fail */ });
+
+async function handleGoogleToken(response) {
+  const errEl = document.getElementById('googleError');
+  errEl.textContent = '';
+  try {
+    const res = await fetch('/api/auth/google', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ credential: response.credential })
+    });
+    const data = await res.json();
+    if (!res.ok) { errEl.textContent = data.error || 'Google sign-in failed.'; return; }
+    localStorage.setItem(TOKEN_KEY, data.token);
+    document.getElementById('navUsername').textContent = data.username + ' (' + data.role + ')';
+    showAdminPanel();
+  } catch {
+    errEl.textContent = 'Connection error during Google sign-in.';
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Auth
 // ---------------------------------------------------------------------------
 

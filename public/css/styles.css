@@ -196,7 +196,7 @@ body.admin-page {
 
 .login-logo {
   display: block;
-  height: 48px;
+  height: 120px;
   width: auto;
   margin: 0 auto 20px;
 }
@@ -214,6 +214,26 @@ body.admin-page {
   color: var(--text-muted);
   margin-bottom: 28px;
   text-align: center;
+}
+
+/* ============================================================
+   SSO Divider
+   ============================================================ */
+.sso-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0 16px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.sso-divider::before,
+.sso-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
 }
 
 /* ============================================================
