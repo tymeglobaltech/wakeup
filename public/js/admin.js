@@ -355,8 +355,8 @@ function openUserModal(user) {
        <input type="email" id="mEmail" value="${isEdit ? esc(user.email || '') : ''}" placeholder="agent@example.com">
      </div>
      <div class="form-group">
-       <label>${isEdit ? 'New Password (leave blank to keep current)' : 'Password'}</label>
-       <input type="password" id="mPassword" autocomplete="new-password" placeholder="${isEdit ? 'Leave blank to keep current' : 'Enter password'}">
+       <label>Password <span style="font-weight:400;text-transform:none;font-size:11px">(leave blank if using SSO)</span></label>
+       <input type="password" id="mPassword" autocomplete="new-password" placeholder="Leave blank if using Google SSO">
      </div>
      <div class="form-group">
        <label>Role</label>
@@ -372,7 +372,6 @@ function openUserModal(user) {
     const password = document.getElementById('mPassword').value;
     const role     = document.getElementById('mRole').value;
     if (!username) { showToast('Username is required.', true); return; }
-    if (!isEdit && !password) { showToast('Password is required.', true); return; }
 
     const body = { username, email, role };
     if (password) body.password = password;

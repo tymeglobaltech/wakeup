@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wake Up Call</title>
+  <link rel="icon" href="/favicon.ico">
   <link rel="stylesheet" href="/css/styles.css">
   <script>
     // Apply saved theme before paint to avoid flash
@@ -69,9 +70,13 @@
           const col = document.createElement('div');
           col.className = 'group-col';
 
-          const linksHtml = (group.links || []).map(l =>
-            `<li><a href="${safeHref(l.url)}"${l.url !== '#' ? ' target="_blank" rel="noopener noreferrer"' : ''}>${esc(l.label)}</a></li>`
-          ).join('');
+          const linksHtml = (group.links || []).map(l => {
+            const href = safeHref(l.url);
+            const onclick = href !== '#'
+              ? `onclick="window.open('${href}','popup','width=1200,height=600,left=100,top=100');return false;"`
+              : '';
+            return `<li><a href="${href}" ${onclick}>${esc(l.label)}</a></li>`;
+          }).join('');
 
           col.innerHTML =
             `<div class="group-header" style="--hue:${esc(group.color)}">${esc(group.label)}</div>` +

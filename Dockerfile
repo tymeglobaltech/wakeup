@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Install dependencies first (cached layer — only re-runs if package files change)
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm install --omit=dev
 
 # Copy application files
 COPY server.js ./

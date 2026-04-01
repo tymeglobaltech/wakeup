@@ -408,8 +408,8 @@ app.get('/api/admin/users', authMiddleware, (req, res) => {
 
 app.post('/api/admin/users', authMiddleware, (req, res) => {
   const { username, password, role, email } = req.body || {};
-  if (!username || !username.trim() || !password) {
-    return res.status(400).json({ error: 'Username and password are required' });
+  if (!username || !username.trim()) {
+    return res.status(400).json({ error: 'Username is required' });
   }
   const data = readData();
   if (data.users.find(u => u.username === username.trim())) {
@@ -419,7 +419,7 @@ app.post('/api/admin/users', authMiddleware, (req, res) => {
     id: generateId(),
     username: username.trim(),
     email: email ? email.trim().toLowerCase() : '',
-    passwordHash: bcrypt.hashSync(password, 10),
+    passwordHash: password ? bcrypt.hashSync(password, 10) : '',
     role: role === 'admin' ? 'admin' : 'agent'
   };
   data.users.push(user);
