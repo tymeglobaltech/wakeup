@@ -7,7 +7,6 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="stylesheet" href="/css/styles.css">
   <script>
-    // Apply saved theme before paint to avoid flash
     (function() {
       const t = localStorage.getItem('wuc_theme');
       if (t) document.documentElement.setAttribute('data-theme', t);
@@ -30,7 +29,40 @@
     </div>
   </main>
 
+  <!-- =========================================================
+       IFRAME POPUP MODAL
+       ========================================================= -->
+  <div id="iframeOverlay" class="iframe-overlay" style="display:none" onclick="handleOverlayClick(event)">
+    <div id="iframeBox" class="iframe-box">
+
+      <div class="iframe-header">
+        <span id="iframeTitle" class="iframe-title"></span>
+        <div class="iframe-header-actions">
+          <button class="iframe-btn" onclick="popOut()" title="Open in separate window">&#10138;</button>
+          <button class="iframe-btn" onclick="closePopup()" title="Close">&#10005;</button>
+        </div>
+      </div>
+
+      <div id="iframeLoading" class="iframe-loading">
+        <div class="iframe-spinner"></div>
+        <p>Loading&hellip;</p>
+      </div>
+
+      <div id="iframeBlocked" class="iframe-blocked" style="display:none">
+        <p>&#128274; This page cannot be displayed inside a popup.</p>
+        <button class="btn btn-primary" onclick="popOut()">Open in Separate Window</button>
+      </div>
+
+      <iframe id="iframeEl" class="iframe-el" src="about:blank"
+              onload="onIframeLoad()" onerror="onIframeError()"></iframe>
+
+    </div>
+  </div>
+
   <script>
+    // -----------------------------------------------------------------------
+    // Utilities
+    // -----------------------------------------------------------------------
     function esc(str) {
       return String(str)
         .replace(/&/g, '&amp;')
@@ -41,12 +73,14 @@
 
     function safeHref(url) {
       const u = String(url || '').trim();
-      return (u === '#' || u.startsWith('http://') || u.startsWith('https://')) ? esc(u) : '#';
+      return (u === '#' || u.startsWith('http://') || u.startsWith('https://')) ? u : '#';
     }
 
+    // -----------------------------------------------------------------------
+    // Theme
+    // -----------------------------------------------------------------------
     function toggleTheme() {
-      const current = document.documentElement.getAttribute('data-theme');
-      const next = current === 'dark' ? 'light' : 'dark';
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
       localStorage.setItem('wuc_theme', next);
       updateThemeBtn();
@@ -55,12 +89,118 @@
     function updateThemeBtn() {
       const btn = document.getElementById('themeToggle');
       if (!btn) return;
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      btn.textContent = isDark ? '☀ Light' : '☽ Dark';
+      btn.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀ Light' : '☽ Dark';
     }
 
     updateThemeBtn();
 
+    // -----------------------------------------------------------------------
+    // Iframe popup
+    // -----------------------------------------------------------------------
+    let _popupUrl = '';
+    let _blockedTimer = null;
+
+    function openPopup(url, label, event) {
+      _popupUrl = url;
+      const overlay = document.getElementById('iframeOverlay');
+      const box     = document.getElementById('iframeBox');
+      const frame   = document.getElementById('iframeEl');
+
+      // Position transform-origin at cursor so it expands from the click point
+      const x = ((event.clientX / window.innerWidth)  * 100).toFixed(1);
+      const y = ((event.clientY / window.innerHeight) * 100).toFixed(1);
+      box.style.transformOrigin = `${x}% ${y}%`;
+
+      // Reset animation
+      box.style.animation = 'none';
+      box.offsetHeight; // force reflow
+      box.style.animation = '';
+
+      // Reset state
+      document.getElementById('iframeTitle').textContent   = label;
+      document.getElementById('iframeLoading').style.display = 'flex';
+      document.getElementById('iframeBlocked').style.display = 'none';
+      frame.style.opacity = '0';
+
+      // Start loading
+      frame.src = url;
+      overlay.style.display = 'flex';
+
+      // Fallback timer — if iframe hasn't shown content after 6s, offer pop-out
+      clearTimeout(_blockedTimer);
+      _blockedTimer = setTimeout(() => {
+        if (document.getElementById('iframeLoading').style.display !== 'none') {
+          showBlocked();
+        }
+      }, 6000);
+    }
+
+    function onIframeLoad() {
+      clearTimeout(_blockedTimer);
+      const frame   = document.getElementById('iframeEl');
+      const loading = document.getElementById('iframeLoading');
+      const blocked = document.getElementById('iframeBlocked');
+
+      // Try to detect if content actually loaded or was blocked
+      try {
+        const loc = frame.contentWindow.location.href;
+        // Same-origin and loaded something real
+        if (loc && loc !== 'about:blank') {
+          loading.style.display = 'none';
+          blocked.style.display = 'none';
+          frame.style.opacity   = '1';
+        } else {
+          // about:blank — likely blocked
+          showBlocked();
+        }
+      } catch (e) {
+        // Cross-origin — browser threw, which means the page DID load (cross-origin pages load fine)
+        // Only X-Frame-Options denials result in an empty contentDocument on some browsers
+        loading.style.display = 'none';
+        blocked.style.display = 'none';
+        frame.style.opacity   = '1';
+
+        // Secondary check: after a short delay see if the iframe has any height content
+        setTimeout(() => {
+          try {
+            // If still accessible and blank, it was blocked
+            if (frame.contentWindow.location.href === 'about:blank') showBlocked();
+          } catch { /* cross-origin, it loaded fine */ }
+        }, 500);
+      }
+    }
+
+    function onIframeError() {
+      clearTimeout(_blockedTimer);
+      showBlocked();
+    }
+
+    function showBlocked() {
+      document.getElementById('iframeLoading').style.display = 'none';
+      document.getElementById('iframeBlocked').style.display = 'flex';
+      document.getElementById('iframeEl').style.opacity = '0';
+    }
+
+    function popOut() {
+      window.open(_popupUrl, 'popup', 'width=1200,height=600,left=100,top=100');
+      closePopup();
+    }
+
+    function closePopup() {
+      clearTimeout(_blockedTimer);
+      document.getElementById('iframeOverlay').style.display = 'none';
+      document.getElementById('iframeEl').src = 'about:blank';
+    }
+
+    function handleOverlayClick(e) {
+      if (e.target === document.getElementById('iframeOverlay')) closePopup();
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
+
+    // -----------------------------------------------------------------------
+    // Render groups
+    // -----------------------------------------------------------------------
     fetch('/api/groups')
       .then(r => r.json())
       .then(groups => {
@@ -72,15 +212,20 @@
 
           const linksHtml = (group.links || []).map(l => {
             const href = safeHref(l.url);
-            const onclick = href !== '#'
-              ? `onclick="window.open('${href}','popup','width=1200,height=600,left=100,top=100');return false;"`
-              : '';
-            return `<li><a href="${href}" ${onclick}>${esc(l.label)}</a></li>`;
+            return `<li><a href="${esc(href)}" data-popup="${href !== '#' ? '1' : ''}" data-label="${esc(l.label)}">${esc(l.label)}</a></li>`;
           }).join('');
 
           col.innerHTML =
             `<div class="group-header" style="--hue:${esc(group.color)}">${esc(group.label)}</div>` +
             `<ul class="group-links">${linksHtml || '<li class="empty-placeholder">&nbsp;</li>'}</ul>`;
+
+          // Attach popup listeners after innerHTML is set
+          col.querySelectorAll('a[data-popup="1"]').forEach(a => {
+            a.addEventListener('click', e => {
+              e.preventDefault();
+              openPopup(a.getAttribute('href'), a.dataset.label, e);
+            });
+          });
 
           grid.appendChild(col);
         });

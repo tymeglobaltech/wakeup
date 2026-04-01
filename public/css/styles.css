@@ -664,6 +664,128 @@ body.admin-page {
 @keyframes fadeOut { to { opacity: 0; } }
 
 /* ============================================================
+   Iframe Popup Modal
+   ============================================================ */
+.iframe-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: overlayIn .2s ease;
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.iframe-box {
+  width: 1200px;
+  height: 620px;
+  max-width: 95vw;
+  max-height: 92vh;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 32px 80px rgba(0,0,0,.45), 0 8px 24px rgba(0,0,0,.2);
+  animation: popupExpand .32s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
+}
+
+@keyframes popupExpand {
+  from { opacity: 0; transform: scale(0.04); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.iframe-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px 0 16px;
+  background: var(--nav-bg);
+  color: #fff;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.iframe-title {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--font);
+}
+
+.iframe-header-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.iframe-btn {
+  background: rgba(255,255,255,.14);
+  border: none;
+  color: #fff;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition);
+}
+
+.iframe-btn:hover { background: rgba(255,255,255,.28); }
+
+.iframe-el {
+  flex: 1;
+  border: none;
+  width: 100%;
+  transition: opacity .2s ease;
+}
+
+.iframe-loading,
+.iframe-blocked {
+  position: absolute;
+  inset: 44px 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: var(--page-bg);
+  color: var(--text-muted);
+  font-size: 14px;
+  font-family: var(--font);
+}
+
+.iframe-blocked { gap: 16px; color: var(--text); }
+.iframe-blocked p { font-size: 15px; }
+
+.iframe-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border);
+  border-top-color: var(--teal);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+[data-theme="dark"] .iframe-box { background: var(--card-bg); }
+[data-theme="dark"] .iframe-loading,
+[data-theme="dark"] .iframe-blocked { background: var(--card-bg); }
+
+/* ============================================================
    Theme Toggle Button
    ============================================================ */
 .theme-toggle-btn {
