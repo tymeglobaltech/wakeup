@@ -6,7 +6,6 @@
 
 fetch('/api/config').then(r => r.json()).then(config => {
   if (!config.googleClientId) return;
-  document.getElementById('ssoDivider').style.display = '';
   const script = document.createElement('script');
   script.src = 'https://accounts.google.com/gsi/client';
   script.onload = () => {
@@ -67,41 +66,6 @@ async function apiFetch(path, opts) {
   }
   return res;
 }
-
-// ---------------------------------------------------------------------------
-// Login
-// ---------------------------------------------------------------------------
-
-document.getElementById('loginForm').addEventListener('submit', async e => {
-  e.preventDefault();
-  const username = document.getElementById('inputUsername').value.trim();
-  const password = document.getElementById('inputPassword').value;
-  const errEl = document.getElementById('loginError');
-  errEl.textContent = '';
-
-  if (!username || !password) {
-    errEl.textContent = 'Please enter username and password.';
-    return;
-  }
-
-  try {
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    });
-    const data = await res.json();
-    if (!res.ok) {
-      errEl.textContent = data.error || 'Login failed.';
-      return;
-    }
-    localStorage.setItem(TOKEN_KEY, data.token);
-    document.getElementById('navUsername').textContent = data.username + ' (' + data.role + ')';
-    showAdminPanel();
-  } catch {
-    errEl.textContent = 'Connection error. Is the server running?';
-  }
-});
 
 function logout() {
   localStorage.removeItem(TOKEN_KEY);
